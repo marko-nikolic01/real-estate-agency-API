@@ -76,5 +76,20 @@ namespace RealEstateAgencyAPI.Controllers
             PropertyStorage.properties.Remove(property);
             return NoContent();
         }
+
+        [HttpPut("{id:int}", Name = "UpdateProperty")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult<PropertyDTO> UpdateProperty(int id, [FromBody] PropertyDTO propertyDTO)
+        {
+            if (propertyDTO == null || id != propertyDTO.Id)
+            {
+                return BadRequest(propertyDTO);
+            }
+            var property = PropertyStorage.properties.FirstOrDefault(property => property.Id == id);
+            property.Name = propertyDTO.Name;
+            property.SquareMeters = propertyDTO.SquareMeters;
+            return NoContent();
+        }
     }
 }
