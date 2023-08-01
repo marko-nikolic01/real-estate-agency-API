@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RealEstateAgencyAPI.Data;
 using RealEstateAgencyAPI.Models;
 using RealEstateAgencyAPI.Models.DTO;
 
@@ -11,9 +12,7 @@ namespace RealEstateAgencyAPI.Controllers
         [HttpGet]
         public IEnumerable<PropertyDTO> GetProperties()
         {
-            return new List<PropertyDTO> {
-                new PropertyDTO { Id = 1, Name = "Beach house"},
-                new PropertyDTO { Id = 2, Name = "Appartment"}
+            return PropertyStorage.properties;
             };
         }
     }
