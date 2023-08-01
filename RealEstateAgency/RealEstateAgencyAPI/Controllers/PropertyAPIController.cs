@@ -1,18 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RealEstateAgencyAPI.Models;
+using RealEstateAgencyAPI.Models.DTO;
 
 namespace RealEstateAgencyAPI.Controllers
 {
     [ApiController]
-    [Route("api/Property")]
+    [Route("api/property")]
     public class PropertyAPIController : ControllerBase
     {
         [HttpGet]
-        public IEnumerable<Property> GetProperties()
+        public IEnumerable<PropertyDTO> GetProperties()
         {
-            return new List<Property> {
-                new Property { Id = 1, Name = "Beach house"},
-                new Property { Id = 2, Name = "Appartment"}
+            return new List<PropertyDTO> {
+                new PropertyDTO { Id = 1, Name = "Beach house"},
+                new PropertyDTO { Id = 2, Name = "Appartment"}
             };
         }
     }
