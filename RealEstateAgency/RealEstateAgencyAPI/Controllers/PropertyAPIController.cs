@@ -11,11 +11,12 @@ namespace RealEstateAgencyAPI.Controllers
     public class PropertyAPIController : ControllerBase
     {
         private readonly ILogger<PropertyAPIController> _logger;
-
         public PropertyAPIController(ILogger<PropertyAPIController> logger)
         {
             _logger = logger;
         }
+
+        
 
         [HttpGet(Name = "GetProperties")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<PropertyDTO>))]
@@ -24,6 +25,8 @@ namespace RealEstateAgencyAPI.Controllers
             _logger.LogInformation("Getting all poperties...");
             return Ok(PropertyStorage.properties);
         }
+
+
 
         [HttpGet("{id:int}", Name = "GetProperty")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -43,6 +46,8 @@ namespace RealEstateAgencyAPI.Controllers
             }
             return Ok(property);
         }
+
+
 
         [HttpPost(Name = "CreateProperty")]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -68,6 +73,8 @@ namespace RealEstateAgencyAPI.Controllers
             return CreatedAtRoute("GetProperty", new { id = propertyDTO.Id }, propertyDTO);
         }
 
+
+
         [HttpDelete("{id:int}", Name = "DeleteProperty")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -87,6 +94,8 @@ namespace RealEstateAgencyAPI.Controllers
             return NoContent();
         }
 
+
+
         [HttpPut("{id:int}", Name = "UpdateProperty")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -101,6 +110,8 @@ namespace RealEstateAgencyAPI.Controllers
             property.SquareMeters = propertyDTO.SquareMeters;
             return NoContent();
         }
+
+
 
         [HttpPatch("{id:int}", Name = "PatchProperty")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
