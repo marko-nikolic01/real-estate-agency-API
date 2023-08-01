@@ -28,7 +28,7 @@ namespace RealEstateAgencyAPI.Models
         public string Country { get; set; }
         [Required]
         public DateTime CreatedDate { get; set; }
-
+        
         public Property()
         {
             Id = 0;

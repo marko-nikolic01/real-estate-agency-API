@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RealEstateAgencyAPI.Data;
 using RealEstateAgencyAPI.Models;
 using RealEstateAgencyAPI.Models.DTO;
@@ -11,19 +12,23 @@ namespace RealEstateAgencyAPI.Controllers
     public class PropertyAPIController : ControllerBase
     {
         private readonly ILogger<PropertyAPIController> _logger;
-        public PropertyAPIController(ILogger<PropertyAPIController> logger)
+        private readonly ApplicationDbContext _db;
+        public PropertyAPIController(ILogger<PropertyAPIController> logger, ApplicationDbContext db)
         {
             _logger = logger;
+            _db = db;
+            _logger.LogInformation("Property count:" + _db.Properties.Count());
         }
 
         
 
         [HttpGet(Name = "GetProperties")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<PropertyDTO>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Property>))]
+        [Produces("application/json")]
         public ActionResult GetProperties()
         {
             _logger.LogInformation("Getting all poperties...");
-            return Ok(PropertyStorage.properties);
+            return Ok(_db.Properties);
         }
 
 
@@ -32,6 +37,7 @@ namespace RealEstateAgencyAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Produces("application/json")]
         public ActionResult<PropertyDTO> GetProperty(int id)
         {
             if (id == 0)
@@ -39,7 +45,7 @@ namespace RealEstateAgencyAPI.Controllers
                 _logger.LogError("Error: Couldn't get a property with an ID of 0.");
                 return BadRequest();
             }
-            var property = PropertyStorage.properties.FirstOrDefault(property => property.Id == id);
+            var property = _db.Properties.FirstOrDefault(property => property.Id == id);
             if (property == null)
             {
                 return NotFound();
@@ -53,9 +59,10 @@ namespace RealEstateAgencyAPI.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Produces("application/json")]
         public ActionResult<PropertyDTO> CreateProperty([FromBody]PropertyDTO propertyDTO)
         {
-            if (PropertyStorage.properties.FirstOrDefault(property => property.Name == propertyDTO.Name) != null)
+            if (_db.Properties.FirstOrDefault(property => property.Name == propertyDTO.Name) != null)
             {
                 ModelState.AddModelError("CustomError", "Property already exists!");
                 return BadRequest(ModelState);
@@ -68,8 +75,18 @@ namespace RealEstateAgencyAPI.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
-            propertyDTO.Id = PropertyStorage.properties.OrderByDescending(property => property.Id).FirstOrDefault().Id + 1;
-            PropertyStorage.properties.Add(propertyDTO);
+            _db.Properties.Add(new Property {
+                Name = propertyDTO.Name,
+                SquareMeters = propertyDTO.SquareMeters,
+                Details = propertyDTO.Details,
+                ImageURL = propertyDTO.ImageURL,
+                Type = propertyDTO.Type,
+                Address = propertyDTO.Address,
+                City = propertyDTO.City,
+                Country = propertyDTO.Country,
+                CreatedDate = DateTime.Now
+            });
+            _db.SaveChanges();
             return CreatedAtRoute("GetProperty", new { id = propertyDTO.Id }, propertyDTO);
         }
 
@@ -85,12 +102,13 @@ namespace RealEstateAgencyAPI.Controllers
             {
                 return BadRequest();
             }
-            var property = PropertyStorage.properties.FirstOrDefault(property => property.Id == id);
+            var property = _db.Properties.FirstOrDefault(property => property.Id == id);
             if (property == null)
             {
                 return NotFound();
             }
-            PropertyStorage.properties.Remove(property);
+            _db.Properties.Remove(property);
+            _db.SaveChanges();
             return NoContent();
         }
 
@@ -105,9 +123,21 @@ namespace RealEstateAgencyAPI.Controllers
             {
                 return BadRequest();
             }
-            var property = PropertyStorage.properties.FirstOrDefault(property => property.Id == id);
-            property.Name = propertyDTO.Name;
-            property.SquareMeters = propertyDTO.SquareMeters;
+            var property = _db.Properties.AsNoTracking().FirstOrDefault(property => property.Id == id);
+            Property model = new Property
+            {
+                Id = id,
+                Name = propertyDTO.Name,
+                SquareMeters = propertyDTO.SquareMeters,
+                Details = propertyDTO.Details,
+                ImageURL = propertyDTO.ImageURL,
+                Type = propertyDTO.Type,
+                Address = propertyDTO.Address,
+                City = propertyDTO.City,
+                Country = propertyDTO.Country
+            };
+            _db.Properties.Update(model);
+            _db.SaveChanges();
             return NoContent();
         }
 
@@ -123,12 +153,38 @@ namespace RealEstateAgencyAPI.Controllers
             {
                 return BadRequest();
             }
-            var property = PropertyStorage.properties.FirstOrDefault(property => property.Id == id);
+            var property = _db.Properties.AsNoTracking().FirstOrDefault(property => property.Id == id);
             if (property == null)
             {
                 return NotFound();
             }
-            propertyDTO.ApplyTo(property, ModelState);
+            PropertyDTO modelDTO = new PropertyDTO
+            {
+                Id = property.Id,
+                Name = property.Name,
+                SquareMeters = property.SquareMeters,
+                Details = property.Details,
+                ImageURL = property.ImageURL,
+                Type = property.Type,
+                Address = property.Address,
+                City = property.City,
+                Country = property.Country
+            };
+            propertyDTO.ApplyTo(modelDTO, ModelState);
+            Property model = new Property
+            {
+                Id = modelDTO.Id,
+                Name = modelDTO.Name,
+                SquareMeters = modelDTO.SquareMeters,
+                Details = modelDTO.Details,
+                ImageURL = modelDTO.ImageURL,
+                Type = modelDTO.Type,
+                Address = modelDTO.Address,
+                City = modelDTO.City,
+                Country = modelDTO.Country
+            };
+            _db.Properties.Update(model);
+            _db.SaveChanges();
             return NoContent();
         }
     }
