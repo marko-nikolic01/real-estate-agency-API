@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
 using RealEstateAgencyAPI.Data;
 using RealEstateAgencyAPI.Models;
 using RealEstateAgencyAPI.Models.DTO;
@@ -80,15 +81,34 @@ namespace RealEstateAgencyAPI.Controllers
         [HttpPut("{id:int}", Name = "UpdateProperty")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<PropertyDTO> UpdateProperty(int id, [FromBody] PropertyDTO propertyDTO)
+        public IActionResult UpdateProperty(int id, [FromBody] PropertyDTO propertyDTO)
         {
             if (propertyDTO == null || id != propertyDTO.Id)
             {
-                return BadRequest(propertyDTO);
+                return BadRequest();
             }
             var property = PropertyStorage.properties.FirstOrDefault(property => property.Id == id);
             property.Name = propertyDTO.Name;
             property.SquareMeters = propertyDTO.SquareMeters;
+            return NoContent();
+        }
+
+        [HttpPatch("{id:int}", Name = "PatchProperty")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult PatchProperty(int id, JsonPatchDocument<PropertyDTO> propertyDTO)
+        {
+            if (propertyDTO == null || id == 0)
+            {
+                return BadRequest();
+            }
+            var property = PropertyStorage.properties.FirstOrDefault(property => property.Id == id);
+            if (property == null)
+            {
+                return NotFound();
+            }
+            propertyDTO.ApplyTo(property, ModelState);
             return NoContent();
         }
     }
