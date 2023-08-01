@@ -13,7 +13,12 @@ namespace RealEstateAgencyAPI.Controllers
         public IEnumerable<PropertyDTO> GetProperties()
         {
             return PropertyStorage.properties;
-            };
+        }
+
+        [HttpGet("id")]
+        public PropertyDTO GetProperty(int id)
+        {
+            return PropertyStorage.properties.FirstOrDefault(property => property.Id == id); ;
         }
     }
 }
