@@ -10,15 +10,29 @@ namespace RealEstateAgencyAPI.Controllers
     public class PropertyAPIController : ControllerBase
     {
         [HttpGet]
-        public IEnumerable<PropertyDTO> GetProperties()
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<PropertyDTO>))]
+        public ActionResult GetProperties()
         {
-            return PropertyStorage.properties;
+            return Ok(PropertyStorage.properties);
         }
 
-        [HttpGet("id")]
-        public PropertyDTO GetProperty(int id)
+        [HttpGet("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<PropertyDTO> GetProperty(int id)
         {
-            return PropertyStorage.properties.FirstOrDefault(property => property.Id == id); ;
+            if (id == 0)
+            {
+                return BadRequest();
+            }
+            var property = PropertyStorage.properties.FirstOrDefault(property => property.Id == id);
+            if (property == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(property);
         }
     }
 }
