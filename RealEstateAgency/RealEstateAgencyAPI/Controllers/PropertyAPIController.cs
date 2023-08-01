@@ -41,6 +41,11 @@ namespace RealEstateAgencyAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<PropertyDTO> CreateProperty([FromBody]PropertyDTO propertyDTO)
         {
+            if (PropertyStorage.properties.FirstOrDefault(property => property.Name == propertyDTO.Name) != null)
+            {
+                ModelState.AddModelError("CustomError", "Property already exists!");
+                return BadRequest(ModelState);
+            }
             if (propertyDTO == null)
             {
                 return BadRequest(propertyDTO);
