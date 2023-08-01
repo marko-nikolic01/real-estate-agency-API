@@ -34,5 +34,24 @@ namespace RealEstateAgencyAPI.Controllers
 
             return Ok(property);
         }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<PropertyDTO> CreateProperty([FromBody]PropertyDTO propertyDTO)
+        {
+            if (propertyDTO == null)
+            {
+                return BadRequest(propertyDTO);
+            }
+            if (propertyDTO.Id > 0)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+            propertyDTO.Id = PropertyStorage.properties.OrderByDescending(property => property.Id).FirstOrDefault().Id + 1;
+            PropertyStorage.properties.Add(propertyDTO);
+            return Ok(propertyDTO);
+        }
     }
 }
