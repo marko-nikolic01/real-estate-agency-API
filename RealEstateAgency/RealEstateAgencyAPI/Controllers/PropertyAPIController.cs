@@ -31,7 +31,6 @@ namespace RealEstateAgencyAPI.Controllers
             {
                 return NotFound();
             }
-
             return Ok(property);
         }
 
@@ -57,6 +56,25 @@ namespace RealEstateAgencyAPI.Controllers
             propertyDTO.Id = PropertyStorage.properties.OrderByDescending(property => property.Id).FirstOrDefault().Id + 1;
             PropertyStorage.properties.Add(propertyDTO);
             return CreatedAtRoute("GetProperty", new { id = propertyDTO.Id }, propertyDTO);
+        }
+
+        [HttpDelete("{id:int}", Name = "DeleteProperty")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult DeleteProperty(int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest();
+            }
+            var property = PropertyStorage.properties.FirstOrDefault(property => property.Id == id);
+            if (property == null)
+            {
+                return NotFound();
+            }
+            PropertyStorage.properties.Remove(property);
+            return NoContent();
         }
     }
 }
