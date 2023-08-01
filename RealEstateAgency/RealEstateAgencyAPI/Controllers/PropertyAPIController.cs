@@ -10,10 +10,18 @@ namespace RealEstateAgencyAPI.Controllers
     [Route("api/property")]
     public class PropertyAPIController : ControllerBase
     {
+        private readonly ILogger<PropertyAPIController> _logger;
+
+        public PropertyAPIController(ILogger<PropertyAPIController> logger)
+        {
+            _logger = logger;
+        }
+
         [HttpGet(Name = "GetProperties")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<PropertyDTO>))]
         public ActionResult GetProperties()
         {
+            _logger.LogInformation("Getting all poperties...");
             return Ok(PropertyStorage.properties);
         }
 
@@ -25,6 +33,7 @@ namespace RealEstateAgencyAPI.Controllers
         {
             if (id == 0)
             {
+                _logger.LogError("Error: Couldn't get a property with an ID of 0.");
                 return BadRequest();
             }
             var property = PropertyStorage.properties.FirstOrDefault(property => property.Id == id);
