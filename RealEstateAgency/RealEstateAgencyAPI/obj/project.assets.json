@@ -474,11 +474,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Marko\\Desktop\\Vezbanje\\ASP.Net Core\\API\\RealEstateAgency\\RealEstateAgencyAPI\\RealEstateAgencyAPI.csproj",
+      "projectUniqueName": "C:\\Users\\Marko\\Documents\\GitHub\\real-estate-agency-API\\RealEstateAgency\\RealEstateAgencyAPI\\RealEstateAgencyAPI.csproj",
       "projectName": "RealEstateAgencyAPI",
-      "projectPath": "C:\\Users\\Marko\\Desktop\\Vezbanje\\ASP.Net Core\\API\\RealEstateAgency\\RealEstateAgencyAPI\\RealEstateAgencyAPI.csproj",
+      "projectPath": "C:\\Users\\Marko\\Documents\\GitHub\\real-estate-agency-API\\RealEstateAgency\\RealEstateAgencyAPI\\RealEstateAgencyAPI.csproj",
       "packagesPath": "C:\\Users\\Marko\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Marko\\Desktop\\Vezbanje\\ASP.Net Core\\API\\RealEstateAgency\\RealEstateAgencyAPI\\obj\\",
+      "outputPath": "C:\\Users\\Marko\\Documents\\GitHub\\real-estate-agency-API\\RealEstateAgency\\RealEstateAgencyAPI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Marko\\AppData\\Roaming\\NuGet\\NuGet.Config",

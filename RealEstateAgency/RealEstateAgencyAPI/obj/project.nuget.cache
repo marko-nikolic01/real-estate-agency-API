@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "VXxNUhrmd95srNxP6ju9ogpwpXhX6mwS0Q0l4XfWNGuc2JEWkGpRjLwhr3NxAJGsthyrf0SmBtTulIaz7c8jVw==",
+  "dgSpecHash": "voRg7awgZYl+Ic0U+Uhi0g4tHrGdHZiDzhkeW5kakH5c0PnhUWMRcgYtShyguCp8/lX2/c+9FU55Oqi9Kqmgsg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Marko\\Desktop\\Vezbanje\\ASP.Net Core\\API\\RealEstateAgency\\RealEstateAgencyAPI\\RealEstateAgencyAPI.csproj",
+  "projectFilePath": "C:\\Users\\Marko\\Documents\\GitHub\\real-estate-agency-API\\RealEstateAgency\\RealEstateAgencyAPI\\RealEstateAgencyAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Marko\\.nuget\\packages\\microsoft.aspnetcore.openapi\\7.0.8\\microsoft.aspnetcore.openapi.7.0.8.nupkg.sha512",
     "C:\\Users\\Marko\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
